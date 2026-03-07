@@ -4,6 +4,9 @@ WORKDIR /app
 
 COPY backend /app
 
+RUN chmod +x gradlew
 RUN ./gradlew build
 
-CMD java -jar build/libs/referral_tracker-0.0.1-SNAPSHOT.jar
+EXPOSE 8080
+
+CMD ["java", "-jar", "build/libs/app.jar"]
