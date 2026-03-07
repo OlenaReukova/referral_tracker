@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
+
 function App() {
 
     const [message, setMessage] = useState("");
 
     useEffect(() => {
-        fetch("http://localhost:8080/api/hello")
+
+        fetch(`${API_URL}/api/hello`)
             .then(res => res.text())
             .then(data => setMessage(data));
+
     }, []);
 
     return (
