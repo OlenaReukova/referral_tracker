@@ -18,24 +18,28 @@ public class ReferralControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void shouldGetReferralDetailsByReferralId() throws Exception {
-        String patientId = "123456789";
-        String referralId = "ref001";
-
-        mockMvc.perform(get("/mock/api/v1/patients/" + patientId + "/referrals/" + referralId))
+    public void shouldGetReferrals() throws Exception {
+        mockMvc.perform(get("/api/referrals"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(referralId))
+                .andExpect(jsonPath("$.referrals[0].id").value("ref001"))
+                .andExpect(jsonPath("$.referrals[0].status").value("Pending"))
+                .andExpect(jsonPath("$.referrals[0].referredBy.name").value("Dr. Jane Smith"));
+    }
+
+    @Test
+    public void shouldGetReferralById() throws Exception {
+        mockMvc.perform(get("/api/referrals/ref001"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value("ref001"))
                 .andExpect(jsonPath("$.status").value("Pending"))
                 .andExpect(jsonPath("$.referredBy.name").value("Dr. Jane Smith"));
     }
 
     @Test
     public void shouldReturn404WhenReferralNotFound() throws Exception {
-        String patientId = "123456789";
-        String referralId = "ref999";
-
-        mockMvc.perform(get("/mock/api/v1/patients/" + patientId + "/referrals/" + referralId))
+        mockMvc.perform(get("/api/referrals/ref999"))
                 .andExpect(status().isNotFound());
     }
 }
