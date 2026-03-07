@@ -1,5 +1,7 @@
 package com.example.referraltracker.controller;
 
+import com.example.referraltracker.service.AuditLogService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -12,8 +14,16 @@ import java.io.InputStream;
 @RestController
 public class ReferralController {
 
+    private final AuditLogService auditLogService;
+
+    @Autowired
+    public ReferralController(AuditLogService auditLogService) {
+        this.auditLogService = auditLogService;
+    }
+
     @GetMapping(value = "/api/referrals", produces = MediaType.APPLICATION_JSON_VALUE)
     public byte[] getReferrals() throws IOException {
+        auditLogService.logActivity("anonymous", "GET_REFERRALS", "/api/referrals", "Fetching all referrals");
         Resource resource = new ClassPathResource("referral_data.json");
         try (InputStream is = resource.getInputStream()) {
             return is.readAllBytes();
