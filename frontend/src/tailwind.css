@@ -1,2 +1,31 @@
 @import 'tailwindcss' source(none);
 @source '../**/*.{js,ts,jsx,tsx}';
+
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Figma Precise Color Palette */
+  --color-page-bg: #e8f2f3;
+  --color-header-bg: #446063;
+  
+  --color-step-completed-bg: #446063;
+  --color-step-current-bg: #446063;
+  --color-step-pending-bg: #c6d9da;
+  
+  --color-timeline-line: #b0c4c5;
+  --color-timeline-dot-inactive: #b0c4c5;
+  
+  --color-text-main: #3b4345;
+  --color-text-header: #ffffff;
+  --color-text-subtle-on-header: #aec3c5;
+  
+  --color-white: #ffffff;
+
+  /* Radii - Figma uses 8px for boxes */
+  --radius-card: 8px;
+  --radius-button: 8px;
+  --radius-pill: 9999px;
+
+  /* Shadows - Minimal per design */
+  --shadow-card: none;
+}
