@@ -1,6 +1,4 @@
 import { ReferralData } from '../types/referral';
-import { MOCK_REFERRALS } from '../mock/referrals';
-
 export const API_URL =
   import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
@@ -19,5 +17,28 @@ export async function fetchReferral(
   }
 
   return (await response.json()) as ReferralData;
+}
+
+export async function updateNotificationPreferences(
+  referralId: string,
+  email: boolean,
+  sms: boolean,
+): Promise<{ status: string; message: string }> {
+  const response = await fetch(
+    `${API_URL}/api/referrals/${referralId}/notification-preferences`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, sms }),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error('Failed to update notification preferences');
+  }
+
+  return (await response.json()) as { status: string; message: string };
 }
 
