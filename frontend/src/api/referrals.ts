@@ -16,7 +16,7 @@ export async function fetchReferral(
 
 export async function updateNotificationPreferences(
   referralId: string,
-  preferences: { 
+  preferences: {
     emailEnabled: boolean;
     email?: string;
     smsEnabled: boolean;
