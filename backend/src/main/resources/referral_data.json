@@ -1,101 +1,70 @@
 {
+  "referralId": "REF-123456",
+
   "patient": {
-    "id": "123456789",
-    "name": {
-      "firstName": "John",
-      "lastName": "Doe"
-    },
-    "dateOfBirth": "1980-05-15",
-    "gender": "Male",
-    "contactInfo": {
-      "email": "john.doe@example.com",
-      "phone": "555-1234567"
-    },
-    "address": {
-      "street": "123 Main St",
-      "city": "Anytown",
-      "state": "CA",
-      "zipCode": "12345"
-    }
+    "firstName": "Adam",
+    "lastName": "Brown",
+    "dateOfBirth": "2015-01-13"
   },
-  "referrals": [
+
+  "estimatedWaitingTime": "8-12 weeks",
+
+  "timeline": [
     {
-      "id": "ref001",
-      "status": "Pending",
-      "referredBy": {
-        "name": "Dr. Jane Smith",
-        "specialty": "Cardiologist"
-      },
-      "referredTo": {
-        "name": "Dr. John Doe",
-        "specialty": "Orthopedist"
-      },
-      "appointment": {
-        "date": "2023-04-15",
-        "time": "10:30 AM"
-      },
-      "notes": "Patient has a history of heart disease and needs an orthopedic consultation."
-    }
-  ],
-  "appointments": [
-    {
-      "id": "app001",
-      "date": "2023-04-15",
-      "time": "10:30 AM",
-      "provider": {
-        "name": "Dr. John Doe",
-        "specialty": "Orthopedist"
-      },
-      "status": "Scheduled"
+      "status": "SENT_BY_SCHOOL",
+      "title": "Sent by School",
+      "description": "The school or support service has submitted the referral to the healthcare clinic.",
+      "date": "2026-03-03",
+      "completed": true
     },
     {
-      "id": "app002",
-      "date": "2023-03-01",
-      "time": "2:00 PM",
-      "provider": {
-        "name": "Dr. Michael Lee",
-        "specialty": "Dermatologist"
-      },
-      "status": "Completed"
+      "status": "RECEIVED_BY_CLINIC",
+      "title": "Received by Clinic",
+      "description": "The clinic has received the referral and registered it in the system.",
+      "date": "2026-05-22",
+      "completed": true
+    },
+    {
+      "status": "REVIEWED_BY_SPECIALIST",
+      "title": "Reviewed by Specialist",
+      "description": "A clinician reviews the referral to determine the next steps.",
+      "date": null,
+      "completed": false
+    },
+    {
+      "status": "WAITING_FOR_ASSESSMENT",
+      "title": "Waiting for Assessment",
+      "description": "The referral has been accepted and the child has been placed on the waiting list.",
+      "date": null,
+      "completed": false
+    },
+    {
+      "status": "ASSESSMENT_BOOKED",
+      "title": "Assessment Booked",
+      "description": "An appointment date has been scheduled.",
+      "date": null,
+      "completed": false
+    },
+    {
+      "status": "ASSESSMENT_COMPLETED",
+      "title": "Assessment Completed",
+      "description": "The appointment has taken place and the specialist has completed the assessment.",
+      "date": null,
+      "completed": false
+    },
+    {
+      "status": "SUPPORT_PLAN",
+      "title": "Support Plan",
+      "description": "A support plan is prepared after the assessment.",
+      "date": null,
+      "completed": false
+    },
+    {
+      "status": "REFERRAL_CLOSED",
+      "title": "Referral Closed",
+      "description": "The referral process has been completed.",
+      "date": null,
+      "completed": false
     }
-  ],
-  "healthInfo": {
-    "conditions": [
-      "Heart Disease",
-      "High Blood Pressure"
-    ],
-    "medications": [
-      {
-        "name": "Atenolol",
-        "dosage": "50mg daily"
-      },
-      {
-        "name": "Lisinopril",
-        "dosage": "10mg daily"
-      }
-    ],
-    "allergies": [
-      "Penicillin",
-      "Pollen"
-    ],
-    "labResults": [
-      {
-        "test": "Cholesterol",
-        "result": {
-          "totalCholesterol": 180,
-          "hdl": 50,
-          "ldl": 120
-        },
-        "date": "2023-02-15"
-      },
-      {
-        "test": "Blood Glucose",
-        "result": {
-          "fasting": 95,
-          "hba1c": 6.2
-        },
-        "date": "2023-01-20"
-      }
-    ]
-  }
+  ]
 }
