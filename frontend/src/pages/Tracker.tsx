@@ -3,6 +3,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import { Header } from '../components/layout/Header';
 import { PageContainer } from '../components/layout/PageContainer';
 import { ReferralTracker } from '../components/tracker/ReferralTracker';
+import { NotificationPreferences } from '../components/tracker/NotificationPreferences';
 import { Button } from '../components/ui/Button';
 import { fetchReferral } from '../api/referrals';
 import { type ReferralData, type ReferralStep, type TrackerStepStatus, STEP_STATUS } from '../types/referral';
@@ -160,7 +161,8 @@ export function Tracker() {
         className="rounded-none shadow-none"
       />
 
-      <div className="mx-auto mt-8 sm:mt-12 px-4 sm:px-8 lg:px-16">
+      <div className="mx-auto mt-4 sm:mt-8 px-4 sm:px-8 lg:px-16 pb-12">
+        <NotificationPreferences />
         <ReferralTracker steps={steps} />
       </div>
     </PageContainer>
