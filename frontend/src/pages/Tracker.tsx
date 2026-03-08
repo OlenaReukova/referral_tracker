@@ -162,7 +162,7 @@ export function Tracker() {
       />
 
       <div className="mx-auto mt-4 sm:mt-8 px-4 sm:px-8 lg:px-16 pb-12">
-        <NotificationPreferences />
+        <NotificationPreferences referralId={referralId} />
         <ReferralTracker steps={steps} />
       </div>
     </PageContainer>
