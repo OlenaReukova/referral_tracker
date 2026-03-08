@@ -7,6 +7,15 @@ import { Button } from '../components/ui/Button';
 import { fetchReferral } from '../api/referrals';
 import { type ReferralData, type ReferralStep, type TrackerStepStatus, STEP_STATUS } from '../types/referral';
 
+function formatDate(dateString: string | null | undefined): string | undefined {
+  if (!dateString) return undefined;
+  const parts = dateString.split('-');
+  if (parts.length === 3) {
+    return `${parts[2]}.${parts[1]}.${parts[0]}`;
+  }
+  return dateString;
+}
+
 export function Tracker() {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
@@ -37,30 +46,77 @@ export function Tracker() {
   const steps: ReferralStep[] = useMemo(() => {
     if (!referral || !referral.timeline) return [];
 
+    const ALL_STEPS_TEMPLATE = [
+      {
+        id: 'SENT_BY_SCHOOL',
+        title: 'Sent by school',
+        description: 'The school or support service has submitted the referral to the healthcare clinic.',
+      },
+      {
+        id: 'RECEIVED_BY_CLINIC',
+        title: 'Received by clinic',
+        description: 'The clinic has received the referral and registered it in the system.',
+      },
+      {
+        id: 'REVIEWED_BY_SPECIALIST',
+        title: 'Reviewed by specialist',
+        description: 'A clinician reviews the referral to determine the next steps.',
+      },
+      {
+        id: 'WAITING_FOR_ASSESSMENT',
+        title: 'Waiting for assessment',
+        description: 'The referral has been accepted and the child has been placed on the waiting list for an appointment.',
+      },
+      {
+        id: 'ASSESSMENT_BOOKED',
+        title: 'Assessment booked',
+        description: 'An appointment date has been scheduled and shared with the parents.',
+      },
+      {
+        id: 'ASSESSMENT_COMPLETED',
+        title: 'Assessment completed',
+        description: 'The appointment has taken place and the specialist has completed the initial assessment.',
+      },
+      {
+        id: 'SUPPORT_PLAN',
+        title: 'Support plan',
+        description: 'After the assessment, the specialist prepares a support plan based on the findings.',
+      },
+      {
+        id: 'CLOSED',
+        title: 'Referral closed',
+        description: 'The referral process is complete and the case has been closed.',
+      },
+    ];
+
     let foundCurrent = false;
 
-    return referral.timeline.map((item) => {
+    return ALL_STEPS_TEMPLATE.map((baseStep) => {
+      // Try to find if the backend returned data for this step
+      const apiStep = referral.timeline.find(t => t.status === baseStep.id);
+
       let stepStatus: TrackerStepStatus = STEP_STATUS.UPCOMING;
 
-      if (item.completed) {
+      if (apiStep?.completed) {
         stepStatus = STEP_STATUS.COMPLETED;
       } else if (!foundCurrent) {
+        // If we haven't found the current step yet, and this step is not completed, this must be current
         stepStatus = STEP_STATUS.CURRENT;
         foundCurrent = true;
-      }
+      } // else it remains UPCOMING
 
-      const isWaiting = item.status === 'WAITING_FOR_ASSESSMENT' || item.status === 'WAITING';
+      const isWaiting = baseStep.id === 'WAITING_FOR_ASSESSMENT';
 
       return {
-        id: item.status,
-        title: item.title,
-        description: item.description,
-        date: item.date || undefined,
+        id: baseStep.id,
+        title: apiStep?.title || baseStep.title,
+        description: apiStep?.description || baseStep.description,
+        date: formatDate(apiStep?.date),
         status: stepStatus,
         additionalInfo: isWaiting && stepStatus !== STEP_STATUS.UPCOMING
           ? `Estimated waiting time: ${referral.estimatedWaitingTime}`
           : undefined,
-        actionLabel: item.status === 'CLOSED' && stepStatus === STEP_STATUS.COMPLETED
+        actionLabel: baseStep.id === 'CLOSED' && stepStatus === STEP_STATUS.COMPLETED
           ? 'Download PDF Report'
           : undefined,
       };
@@ -92,7 +148,7 @@ export function Tracker() {
   }
 
   const patientName = referral?.patient ? `${referral.patient.firstName} ${referral.patient.lastName}` : '';
-  const dob = referral?.patient?.dateOfBirth ?? '';
+  const dob = formatDate(referral?.patient?.dateOfBirth) ?? '';
   const referralId = referral?.referralId ?? '';
 
   return (
