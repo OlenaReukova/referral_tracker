@@ -16,13 +16,21 @@ export interface ReferralStep {
     additionalInfo?: string;
     actionLabel?: string;
 }
+export interface ApiTimelineItem {
+    status: string;
+    title: string;
+    description: string;
+    date: string | null;
+    completed: boolean;
+}
 
 export interface ReferralData {
-    id: string;
-    patientName: string;
-    referralStatus: 'sent' | 'received' | 'reviewed' | 'waiting' | 'booked' | 'completed' | 'closed';
-    referralDate: string;
-    dob: string;
-    clinic: string;
-    notes?: string;
+    referralId: string;
+    patient: {
+        firstName: string;
+        lastName: string;
+        dateOfBirth: string;
+    };
+    estimatedWaitingTime: string;
+    timeline: ApiTimelineItem[];
 }
