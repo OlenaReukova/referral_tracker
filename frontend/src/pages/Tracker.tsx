@@ -4,7 +4,7 @@ import { Header } from '../components/layout/Header';
 import { PageContainer } from '../components/layout/PageContainer';
 import { ReferralTracker } from '../components/tracker/ReferralTracker';
 import { Button } from '../components/ui/Button';
-import { fetchReferral } from '../api/referrals';
+import { fetchReferral, saveNotificationPreferences } from '../api/referrals';
 import { type ReferralData, type ReferralStep, type TrackerStepStatus, STEP_STATUS } from '../types/referral';
 
 function formatDate(dateString: string | null | undefined): string | undefined {
@@ -150,6 +150,23 @@ export function Tracker() {
   const patientName = referral?.patient ? `${referral.patient.firstName} ${referral.patient.lastName}` : '';
   const dob = formatDate(referral?.patient?.dateOfBirth) ?? '';
   const referralId = referral?.referralId ?? '';
+  const [preference, setPreference] = useState<'EMAIL' | 'SMS'>('EMAIL');
+  const [contactValue, setContactValue] = useState('');
+  const [savingPrefs, setSavingPrefs] = useState(false);
+  const [prefSaved, setPrefSaved] = useState(false);
+
+  const handleSavePreferences = async () => {
+    if (!referralId || !contactValue) return;
+    setSavingPrefs(true);
+    try {
+      await saveNotificationPreferences(referralId, preference, contactValue);
+      setPrefSaved(true);
+    } catch (error) {
+      console.error('Failed to save preferences:', error);
+    } finally {
+      setSavingPrefs(false);
+    }
+  };
 
   return (
     <PageContainer className="pt-0 pb-12">
@@ -162,6 +179,68 @@ export function Tracker() {
 
       <div className="mx-auto mt-8 sm:mt-12 px-4 sm:px-8 lg:px-16">
         <ReferralTracker steps={steps} />
+
+        <div className="mt-12 p-6 bg-white rounded-card shadow-sm border border-header-bg/10">
+          <h3 className="text-xl font-semibold text-header-bg mb-4">Notification Preferences</h3>
+          <p className="text-text-main opacity-70 mb-6">
+            Choose how you would like to receive updates about your referral.
+          </p>
+
+          {prefSaved ? (
+            <div className="p-4 bg-step-pending-bg text-header-bg rounded-md">
+              Your notification preferences have been saved.
+            </div>
+          ) : (
+            <div className="flex flex-col gap-4">
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="preference"
+                    value="EMAIL"
+                    checked={preference === 'EMAIL'}
+                    onChange={() => setPreference('EMAIL')}
+                    className="accent-header-bg"
+                  />
+                  <span>Email</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="preference"
+                    value="SMS"
+                    checked={preference === 'SMS'}
+                    onChange={() => setPreference('SMS')}
+                    className="accent-header-bg"
+                  />
+                  <span>SMS</span>
+                </label>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-medium text-text-main">
+                  {preference === 'EMAIL' ? 'Email Address' : 'Phone Number'}
+                </label>
+                <input
+                  type={preference === 'EMAIL' ? 'email' : 'tel'}
+                  value={contactValue}
+                  onChange={(e) => setContactValue(e.target.value)}
+                  placeholder={preference === 'EMAIL' ? 'example@email.com' : '+44 1234 567890'}
+                  className="p-2 border border-timeline-line rounded-md outline-none focus:border-header-bg"
+                />
+              </div>
+
+              <Button
+                variant="primary"
+                onClick={handleSavePreferences}
+                disabled={savingPrefs || !contactValue}
+                className="mt-2 w-fit"
+              >
+                {savingPrefs ? 'Saving...' : 'Save Preferences'}
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
     </PageContainer>
   );

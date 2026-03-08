@@ -21,3 +21,23 @@ export async function fetchReferral(
   return (await response.json()) as ReferralData;
 }
 
+export async function saveNotificationPreferences(
+  referralId: string,
+  preference: 'EMAIL' | 'SMS',
+  contactValue: string,
+): Promise<{ message: string; referralId: string }> {
+  const response = await fetch(`${API_URL}/api/referrals/${referralId}/preferences`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ preference, contactValue }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to save preferences');
+  }
+
+  return await response.json();
+}
+
