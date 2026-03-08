@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { saveNotificationPreferences } from '../../api/referrals';
+import { updateNotificationPreferences } from '../../api/referrals';
 
 export function NotificationPreferences({ referralId }: { referralId: string }) {
     const [emailEnabled, setEmailEnabled] = useState(false);
@@ -15,9 +15,11 @@ export function NotificationPreferences({ referralId }: { referralId: string }) 
         e.preventDefault();
         setSaving(true);
         try {
-            await saveNotificationPreferences(referralId, {
+            await updateNotificationPreferences(referralId, {
+                emailEnabled: emailEnabled,
                 email: emailEnabled ? email : undefined,
-                phone: smsEnabled ? phone : undefined,
+                smsEnabled: smsEnabled,
+                sms: smsEnabled ? phone : undefined,
             });
             setSaved(true);
             setIsOpen(false);

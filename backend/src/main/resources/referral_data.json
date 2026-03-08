@@ -28,8 +28,8 @@
       "status": "REVIEWED_BY_SPECIALIST",
       "title": "Reviewed by Specialist",
       "description": "A clinician reviews the referral to determine the next steps.",
-      "date": null,
-      "completed": false
+      "date": "2026-05-25",
+      "completed": true
     },
     {
       "status": "WAITING_FOR_ASSESSMENT",

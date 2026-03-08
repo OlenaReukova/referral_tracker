@@ -148,7 +148,9 @@ export function Tracker() {
     );
   }
 
-  const patientName = referral?.patient ? `${referral.patient.firstName} ${referral.patient.lastName}` : '';
+  const patientName = referral?.patient
+    ? `${referral.patient.firstName} ${referral.patient.lastName}`
+    : '';
   const dob = formatDate(referral?.patient?.dateOfBirth) ?? '';
   const referralId = referral?.referralId ?? '';
 
