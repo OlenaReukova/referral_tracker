@@ -10,6 +10,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.junit.jupiter.api.BeforeEach;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -57,5 +58,36 @@ public class ReferralControllerTest {
         mockMvc.perform(get("/api/referrals/abc"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("Invalid referral ID format")));
+    }
+
+    @Test
+    public void shouldUpdateReferralStatus() throws Exception {
+        String updatePayload = "{\"status\": \"Scheduled\"}";
+        mockMvc.perform(put("/api/referrals/ref001")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updatePayload))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value("ref001"))
+                .andExpect(jsonPath("$.status").value("Scheduled"));
+    }
+
+    @Test
+    public void shouldReturn400WhenStatusIsMissingInUpdate() throws Exception {
+        String updatePayload = "{}";
+        mockMvc.perform(put("/api/referrals/ref001")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updatePayload))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Status is required"));
+    }
+
+    @Test
+    public void shouldReturn404WhenUpdatingNonExistentReferral() throws Exception {
+        String updatePayload = "{\"status\": \"Scheduled\"}";
+        mockMvc.perform(put("/api/referrals/ref999")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updatePayload))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Referral not found with id: ref999"));
     }
 }
