@@ -21,3 +21,21 @@ export async function fetchReferral(
   return (await response.json()) as ReferralData;
 }
 
+export interface NotificationPreferencesData {
+  email?: string;
+  phone?: string;
+}
+
+export async function saveNotificationPreferences(
+  reference: string,
+  preferences: NotificationPreferencesData
+): Promise<void> {
+  // Simulate network delay
+  await new Promise((resolve) => setTimeout(resolve, 800));
+
+  // In a real app we would do:
+  // const response = await fetch(`${API_URL}/api/referrals/${reference}/notifications`, ...);
+  // if (!response.ok) throw new Error(...);
+
+  console.log(`Mock saved preferences for ${reference}:`, preferences);
+}
