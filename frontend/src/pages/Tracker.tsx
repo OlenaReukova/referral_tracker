@@ -7,6 +7,15 @@ import { Button } from '../components/ui/Button';
 import { fetchReferral } from '../api/referrals';
 import { type ReferralData, type ReferralStep, type TrackerStepStatus, STEP_STATUS } from '../types/referral';
 
+function formatDate(dateString: string | null | undefined): string | undefined {
+  if (!dateString) return undefined;
+  const parts = dateString.split('-');
+  if (parts.length === 3) {
+    return `${parts[2]}.${parts[1]}.${parts[0]}`;
+  }
+  return dateString;
+}
+
 export function Tracker() {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
@@ -102,7 +111,7 @@ export function Tracker() {
         id: baseStep.id,
         title: apiStep?.title || baseStep.title,
         description: apiStep?.description || baseStep.description,
-        date: apiStep?.date || undefined,
+        date: formatDate(apiStep?.date),
         status: stepStatus,
         additionalInfo: isWaiting && stepStatus !== STEP_STATUS.UPCOMING
           ? `Estimated waiting time: ${referral.estimatedWaitingTime}`
@@ -139,7 +148,7 @@ export function Tracker() {
   }
 
   const patientName = referral?.patient ? `${referral.patient.firstName} ${referral.patient.lastName}` : '';
-  const dob = referral?.patient?.dateOfBirth ?? '';
+  const dob = formatDate(referral?.patient?.dateOfBirth) ?? '';
   const referralId = referral?.referralId ?? '';
 
   return (
