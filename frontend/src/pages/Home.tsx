@@ -113,6 +113,11 @@ export function Home() {
             </p>
           )}
 
+          {/* Demo Hint */}
+          <div className="text-center w-full mt-[-10px] mb-[-10px] text-[14px]">
+            <p className="text-[#3b4345]/60 inline-block font-medium">For demo: use codes <span className="font-mono bg-[#3b4345]/5 px-1 rounded text-[13px]">REF-111111</span> to <span className="font-mono bg-[#3b4345]/5 px-1 rounded text-[13px]">REF-888888</span></p>
+          </div>
+
           {/* Button */}
           <button
             type="submit"

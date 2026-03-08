@@ -5,19 +5,23 @@ export const API_URL =
   import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
 export async function fetchAllReferrals(): Promise<ReferralData[]> {
-  // Not used right now, returning empty or throwing.
-  return [];
+  // Simulate network delay
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  return MOCK_REFERRALS;
 }
 
 export async function fetchReferral(
   reference: string,
 ): Promise<ReferralData> {
-  const response = await fetch(`${API_URL}/api/referrals/${reference}`);
+  // Simulate network delay
+  await new Promise((resolve) => setTimeout(resolve, 800));
 
-  if (!response.ok) {
+  const referral = MOCK_REFERRALS.find((r) => r.referralId === reference);
+
+  if (!referral) {
     throw new Error('Failed to fetch referral');
   }
 
-  return (await response.json()) as ReferralData;
+  return referral;
 }
 
