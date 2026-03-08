@@ -38,7 +38,9 @@ public class ReferralController {
             @PathVariable String referralId,
             @RequestBody NotificationPreferenceRequest request) {
 
-        String details = String.format("Email: %b, SMS: %b", request.isEmail(), request.isSms());
+        String details = String.format("Email (%b): %s, SMS (%b): %s",
+                request.isEmailEnabled(), request.getEmail(),
+                request.isSmsEnabled(), request.getSms());
         auditLogService.logActivity("anonymous", "UPDATE_NOTIFICATION_PREFERENCES",
                 "/api/referrals/" + referralId + "/notification-preferences", details);
 

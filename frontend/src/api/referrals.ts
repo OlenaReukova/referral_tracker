@@ -2,11 +2,6 @@ import { ReferralData } from '../types/referral';
 export const API_URL =
   import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
-export async function fetchAllReferrals(): Promise<ReferralData[]> {
-  // Not used right now, returning empty or throwing.
-  return [];
-}
-
 export async function fetchReferral(
   reference: string,
 ): Promise<ReferralData> {
@@ -21,8 +16,12 @@ export async function fetchReferral(
 
 export async function updateNotificationPreferences(
   referralId: string,
-  email: boolean,
-  sms: boolean,
+  preferences: {
+    emailEnabled: boolean;
+    email?: string;
+    smsEnabled: boolean;
+    sms?: string;
+  },
 ): Promise<{ status: string; message: string }> {
   const response = await fetch(
     `${API_URL}/api/referrals/${referralId}/notification-preferences`,
@@ -31,7 +30,7 @@ export async function updateNotificationPreferences(
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email, sms }),
+      body: JSON.stringify(preferences),
     },
   );
 
