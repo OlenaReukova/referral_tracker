@@ -4,7 +4,6 @@ export interface HeaderProps {
   patientName: string;
   dob: string;
   referralId: string;
-  clinic: string;
   className?: string;
 }
 
@@ -12,7 +11,6 @@ export function Header({
   patientName,
   dob,
   referralId,
-  clinic,
   className,
 }: HeaderProps) {
   return (
